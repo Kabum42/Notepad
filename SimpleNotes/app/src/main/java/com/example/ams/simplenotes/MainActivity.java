@@ -8,10 +8,17 @@ import android.view.MenuItem;
 
 public class MainActivity extends Activity {
 
+    private ViewModel viewModel;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        String[] initial_topics = this.getResources().getStringArray(R.array.initial_topics);
+        NotesDatabase myDBNotes = NotesDatabase.getInstance(this);
+        NotesModel notesModel = NotesModel.getInstance(myDBNotes, initial_topics);
+        viewModel = viewModel.getInstance(notesModel);
     }
 
 
