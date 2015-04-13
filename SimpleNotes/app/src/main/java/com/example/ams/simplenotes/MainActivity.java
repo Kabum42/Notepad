@@ -2,6 +2,7 @@ package com.example.ams.simplenotes;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.FragmentManager;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
@@ -17,6 +18,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static com.example.ams.simplenotes.TopicDialogFragment.*;
 
 
 public class MainActivity extends ActionBarActivity implements INotesView {
@@ -74,31 +77,23 @@ public class MainActivity extends ActionBarActivity implements INotesView {
 
     }
 
+    @Override
+    public void setTopic(String topic) {
+        //CAMBIA EL TEXTO DEL TEXTVIEW QUE MUESTRA EL TEMA ESCOGIDO.
+    }
+
+    @Override
+    public void setTopicBgColor(String bgColor) {
+        //CAMBIA EL COLOR DEL TEXTVIEW QUE MUESTRA EL TEMA ESCOGIDO.
+    }
+
+    @Override
     public void fillListOfNotes(ArrayList<String> listOfNotes){
         ArrayAdapter<String> adapterForNotes = new ArrayAdapter<String>(this, R.layout.list_item, listOfNotes);
         notes.setAdapter(adapterForNotes);
     }
 
     @Override
-    public void switchToNoteEdition() {
-
-    }
-
-    @Override
-    public void askForATopic() {
-
-    }
-
-    @Override
-    public void setTopic(String topic) {
-
-    }
-
-    @Override
-    public void setTopicBgColor(String bgColor) {
-
-    }
-
     public void fillListOfTopics(ArrayList<String> listOfTopics) {
 
         List<List<Map<String,String>>> finalListOfTopics =
@@ -116,8 +111,31 @@ public class MainActivity extends ActionBarActivity implements INotesView {
 
     @Override
     public void collapseTopic(int groupPos) {
-
+        //COLAPSA LA EXPANDABLE TOPIC LIST
     }
+
+    @Override
+    public void switchToNoteEdition() {
+        //COMIENZA LA NOTE EDITION ACTIVITY
+    }
+
+    @Override
+    public void askForATopic() {
+        FragmentManager fm = getFragmentManager();
+        TopicDialogFragment newTopicDialog = new TopicDialogFragment();
+        collapseTopic(0);
+        newTopicDialog.setCancelable(false);
+        newTopicDialog.show(fm, "TopicDialogFragment");
+    }
+
+    public TopicDialogListener getTopicListener() {
+        return new TopicDialogListener() {
+            @Override
+            public void onPositiveButtonClick(String topicName) {
+            }
+        };
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
