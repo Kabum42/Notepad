@@ -16,6 +16,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".NoteEditionActivity"
+            android:label="@string/title_activity_note_edition" >
+        </activity>
+        <activity
+            android:name=".ChangeSettingsActivity"
+            android:label="@string/title_activity_change_settings" >
+        </activity>
     </application>
 
 </manifest>

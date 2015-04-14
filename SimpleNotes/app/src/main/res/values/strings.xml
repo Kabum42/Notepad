@@ -4,6 +4,7 @@
     <string name="app_name">SimpleNotes</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+
     <string-array name="initial_topics">
         <item>Leisure</item>
         <item>Home</item>
@@ -14,5 +15,6 @@
         <item>Web</item>
     </string-array>
 
+    <string name="title_activity_note_edition">NoteEditionActivity</string>
 
 </resources>
