@@ -1,6 +1,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:orientation="vertical"
+    android:orientation="horizontal"
     android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
@@ -8,20 +8,14 @@
     android:weightSum="1">
 
     <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content">
-
-        <ExpandableListView
-            android:layout_width="157dp"
-            android:layout_height="wrap_content"
-            android:id="@+id/topicsList" />
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent">
 
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="119dp"
-            android:layout_height="101dp"
-            android:layout_weight="0.50"
+            android:layout_height="wrap_content"
             android:gravity="center|top">
 
             <TextView
@@ -33,13 +27,13 @@
                 android:textSize="30dp"
                 android:gravity="center|top"
                 android:textStyle="bold"
-                android:textColor="#ff0b2727" />
+                android:textColor="#ff0b2727"/>
 
             <TextView
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="Selected"
-                android:id="@+id/currentTopic"
+                android:id="@+id/selectedTopic"
                 android:layout_gravity="right"
                 android:textSize="25dp"
                 android:gravity="center|top"
@@ -47,6 +41,12 @@
                 android:textColor="#fff9fc41" />
 
         </LinearLayout>
+
+        <ExpandableListView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/topicsList"
+            android:layout_weight="0.01" />
 
     </LinearLayout>
 
