@@ -1,4 +1,4 @@
-package com.example.ams.simplenotes;
+package main.java.com.example.ams.simplenotes;
 
 import android.app.ActionBar;
 import android.app.Activity;
@@ -20,7 +20,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.example.ams.simplenotes.TopicDialogFragment.*;
+
 
 
 public class MainActivity extends ActionBarActivity implements INotesView {

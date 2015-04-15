@@ -1,4 +1,4 @@
-package com.example.ams.simplenotes;
+package main.java.com.example.ams.simplenotes;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -7,6 +7,8 @@ import android.app.DialogFragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+
+import main.java.com.example.ams.simplenotes.MainActivity;
 
 /**
  * Created by AMS on 13/04/2015.
