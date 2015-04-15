@@ -18,11 +18,14 @@ public class DeleteDialogFragment extends DialogFragment {
 
     @Override
     public void onAttach(Activity activity) {
-
+        //RELLENAR
     }
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
-        return builder.create();
+        //RELLENAR
+
+        return null;
+        //return builder.create();
     }
 }

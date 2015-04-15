@@ -81,6 +81,7 @@ public class MainActivity extends ActionBarActivity implements INotesView {
 
     }
 
+    @Override
     protected void onResume()
     {
         super.onResume();
@@ -145,8 +146,7 @@ public class MainActivity extends ActionBarActivity implements INotesView {
     public void setTopic(String topic) {
         TextView currentTopic = (TextView) findViewById(R.id.currentTopic);
         currentTopic.setText(topic);
-        //viewModel.setTopic(topic);
-        //collapseTopic(0);
+        collapseTopic(0);
     }
 
     @Override

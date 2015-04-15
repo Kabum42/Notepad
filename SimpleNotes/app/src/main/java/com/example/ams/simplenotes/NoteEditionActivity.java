@@ -9,6 +9,7 @@ import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.ListView;
@@ -50,16 +51,19 @@ public class NoteEditionActivity extends ActionBarActivity implements IEditView 
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
+                //RELLENAR
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
 
+                //RELLENAR
             }
 
             @Override
             public void afterTextChanged(Editable s) {
 
+                //RELLENAR
             }
         };
 
@@ -127,7 +131,8 @@ public class NoteEditionActivity extends ActionBarActivity implements IEditView 
 
     @Override
     public void setTopicNameBgColor(String bgColor) {
-
+        TextView currentTopic = (TextView) findViewById(R.id.currentTopic);
+        currentTopic.setBackgroundColor(new Integer(bgColor));
     }
 
     @Override
@@ -139,33 +144,35 @@ public class NoteEditionActivity extends ActionBarActivity implements IEditView 
     }
 
     @Override
-    public void setTextInNoteBgColor(String bgColor) {
-
-    }
+    public void setTextInNoteBgColor(String bgColor) {note.setBackgroundColor(new Integer(bgColor));}
 
     @Override
     public void disableDelete() {
-
+        Button deleteButton = (Button)findViewById(R.id.deleteButton);
+        deleteButton.setEnabled(false);
     }
 
     @Override
     public void disableOk() {
-
+        Button okButton = (Button)findViewById(R.id.okButton);
+        okButton.setEnabled(false);
     }
 
     @Override
     public void enableOk() {
-
+        Button okButton = (Button)findViewById(R.id.okButton);
+        okButton.setEnabled(false);
     }
 
     @Override
     public void setTextOk(boolean isUpdate) {
-
+        Button okButton = (Button)findViewById(R.id.okButton);
+        okButton.setText(isUpdate ? "Modify" : "Create");
     }
 
     @Override
     public void exit() {
-
+        finish();
     }
 
     public DeleteDialogListener getDeleteListener() {

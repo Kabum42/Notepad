@@ -39,7 +39,7 @@ public class TopicDialogFragment extends DialogFragment {
 
         builder.setView(view);
 
-        //dialogEditText = (EditText) findViewById(R.id.dialogEditText);
+            //RELLENAR
 
         return builder.create();
     }
