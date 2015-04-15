@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:title="@string/pref_notes_appearance">
+        <ListPreference
+            android:key="@string/pref_color"
+            android:title="@string/pref_color_title"
+
+        />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/pref_notes_content">
+        <com.example.jcamen.simplenotes.NumberPickerPreference
+            android:key="@string/pref_chars"
+            android:title="@string/pref_chars_title"
+
+        />
+    </PreferenceCategory>
+</PreferenceScreen>
