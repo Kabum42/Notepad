@@ -31,7 +31,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="Large Text"
+                android:text="Topic"
+                android:textColor="#ff0b2727"
                 android:id="@+id/textView"
                 android:layout_gravity="center_horizontal"
                 android:layout_weight="1" />
@@ -40,7 +41,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Medium Text"
+                android:text="Selected"
+                android:background="#db0a1a30"
+                android:textColor="#fff9fc41"
                 android:id="@+id/textView2"
                 android:layout_gravity="center_horizontal"
                 android:layout_weight="1" />
@@ -52,6 +55,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/textInNote"
+        android:text="Random text"
+        android:textAlignment="gravity"
+        android:gravity="top"
+        android:paddingLeft="32dp"
+        android:paddingTop="24dp"
+        android:background="#fff9fc41"
         android:layout_weight=".25" />
 
     <LinearLayout
