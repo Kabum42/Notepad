@@ -12,55 +12,82 @@ public class NotesModel implements INotesModel {
     private static final String TOPIC_ID = "topic_id";
     private static final String TOPIC_NAME = "topic_name";
 
-    private static final String INTEGER_KEY = "INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL";
+    private static final String INTEGER_KEY = "INTEGER PRIMARY KEY AUTOINCREMENT";
+    private static final String INTEGER_NOT_NULL = "INTEGER NOT NULL";
+    private static final String TEXT_NOT_NULL = "TEXT NOT NULL";
 
-    private static final String[] TOPIC_COLUMNS = {TOPIC_ID, TOPIC_NAME};
+    private static final String[] TOPIC_COLUMNS = { TOPIC_ID, TOPIC_NAME };
+    private static final String [] TOPIC_TYPES = { INTEGER_KEY, TEXT_NOT_NULL};
+    private static final String TOPIC_CONSTRAINTS = null;
 
-    public static NotesModel getInstance(NotesDatabase myDBNotes, String[] initial_topics) {
-        return null;
-    }
+    private static final String TABLE_NOTES = "simple_notes";
+    private static final String NOTE_ID = "note_id";
+    private static final String NOTE_TEXT = "text_in_note";
 
-    private NotesModel(IDatabase myDBNotes, String[] initialTopics) {
+    private static final String [] NOTE_COLUMNS = { NOTE_ID, TOPIC_ID, NOTE_TEXT };
+    private static final String [] NOTE_TYPES = { INTEGER_KEY, INTEGER_NOT_NULL, TEXT_NOT_NULL};
+    private static final String NOTE_CONSTRAINTS = "CONSTRAINT FK_simple_notes_topic_id FOREIGN KEY ("+TOPIC_ID+") REFERENCES "+TABLE_TOPICS+"("+TOPIC_ID+")";
+
+
+    private IDatabase myDBNotes;
+
+    private static NotesModel instance;
+
+    private NotesModel(IDatabase myDBNotes, String [] initialTopics) {
         this.myDBNotes = myDBNotes;
-        myDBNotes.initDatabase(new TableSpecification[]{,});
+        myDBNotes.initDatabase(new TableSpecification[] { new TableSpecification(TABLE_TOPICS, TOPIC_COLUMNS, TOPIC_TYPES, TOPIC_CONSTRAINTS, TOPIC_NAME, initialTopics),
+                new TableSpecification(TABLE_NOTES, NOTE_COLUMNS, NOTE_TYPES, NOTE_CONSTRAINTS, null, null)});
     }
 
-    public static NotesModel getInstance(com.example.ams.simplenotes.IDatabase myDBNotes, String[] initialTopics) {
+    public static NotesModel getInstance(NotesDatabase myDatabase, String[] initialTopics) {
+        if (instance == null) {
+            instance = new NotesModel(myDatabase, initialTopics);
+        }
         return instance;
     }
 
     @Override
-    public ArrayList<String> getListOfTopics() {
-        return null;
+    public String[] getListOfTopics() {
+        ArrayList<String> newList;
+        newList = myDBNotes.selectColumnFromTable(TABLE_TOPICS, TOPIC_NAME, TOPIC_NAME);
+        return newList.toArray(new String[newList.size()]);
     }
 
     @Override
     public boolean insertNewTopic(String topic_name) {
-        return false;
+        return myDBNotes.insertRecordInTable(TABLE_TOPICS, TOPIC_NAME, topic_name);
     }
 
     @Override
-    public int getTopicId(String topic_name) {
-        return 0;
+    public int getIdTopic(String topic_name) {
+        ArrayList<Integer> idList = new ArrayList<>();
+
+        myDBNotes.getColumnAndIds(new String[]{TABLE_TOPICS}, TOPIC_ID, TOPIC_ID, TOPIC_NAME + " = " + topic_name, new String[]{}, TOPIC_ID, new ArrayList<String>(), idList);
+
+        return idList.get(0).intValue();
     }
 
     @Override
-    public void getNotesFromTopic(String topic_name, List<String> listOfNotes, List<Integer> listOfIdNotes) {
+    public void getNotesFromTopic(String topic_name, ArrayList<String> listOfNotes, ArrayList<Integer> listOfIdNotes) {
+        //myDBNotes.getColumnAndIds(new String[]{TABLE_NOTES}, NOTE_TEXT, NOTE_ID, TOPIC_ID + " = " + getIdTopic(topic_name), new String[]{}, NOTE_ID, listOfNotes, listOfIdNotes);
 
+        myDBNotes.getColumnAndIds(new String[]{TABLE_NOTES, TABLE_TOPICS}, NOTE_TEXT, NOTE_ID,
+                TOPIC_NAME + " = ? AND " + TABLE_NOTES + "." + TOPIC_ID + " = " + TABLE_TOPICS + "."+TOPIC_ID,
+                new String[]{topic_name}, NOTE_ID+" ASC", listOfNotes, listOfIdNotes);
     }
 
     @Override
-    public void insertNewNote(int topic_id, String text) {
-
+    public boolean insertNewNote(int id_topic, String text) {
+        return myDBNotes.insertRecordInTable(TABLE_NOTES, TOPIC_ID, id_topic, NOTE_TEXT, text);
     }
 
     @Override
-    public void updateNote(int note_id, int topic_id, String text) {
-
+    public boolean updateNote(int id_note, int id_topic, String text) {
+        return myDBNotes.updateRecordInTable(TABLE_NOTES, NOTE_ID, id_note, TOPIC_ID, id_topic, NOTE_TEXT, text);
     }
 
     @Override
-    public void deleteNote(int note_id) {
-
+    public boolean deleteNote(int note_id) {
+        return myDBNotes.deleteRecordInTable(TABLE_NOTES,NOTE_ID + " = " + note_id, new String[]{});
     }
 }

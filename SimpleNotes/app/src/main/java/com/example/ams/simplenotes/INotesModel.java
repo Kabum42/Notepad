@@ -9,12 +9,12 @@ import java.util.List;
  */
 
 public interface INotesModel {
-    ArrayList<String> getListOfTopics();
+    String[] getListOfTopics();
     boolean insertNewTopic(String topic_name);
-    int getTopicId(String topic_name);
-    void getNotesFromTopic(String topic_name, List<String> listOfNotes,
-                           List<Integer> listOfIdNotes);
-    void insertNewNote(int topic_id, String text);
-    void updateNote(int note_id, int topic_id, String text);
-    void deleteNote(int note_id);
+    int getIdTopic(String topic_name);
+    void getNotesFromTopic(String topic_name, ArrayList<String>
+            listOfNotes, ArrayList<Integer> listOfIdNotes);
+    boolean insertNewNote(int id_topic, String text);
+    boolean updateNote(int note_id, int topic_id, String text);
+    boolean deleteNote(int note_id);
 }
