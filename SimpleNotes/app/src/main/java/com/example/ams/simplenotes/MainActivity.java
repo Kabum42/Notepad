@@ -3,8 +3,11 @@ package com.example.ams.simplenotes;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.FragmentManager;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -78,6 +81,14 @@ public class MainActivity extends ActionBarActivity implements INotesView {
                 viewModel.onNotesListPressed(position, noteItem.toString());
             }
         });
+
+        /*PreferenceManager.setDefaultValues(this, R.xml.simple_notes_preference_screen, false);
+
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        String bgNoteColor = preferences.getString("No sé","Qué poner");
+        viewModel.setBgNoteColor(bgNoteColor);
+        int charsToShow = preferences.getInt("ALGO", 1);
+        viewModel.setCharsToShow(charsToShow);*/
 
     }
 

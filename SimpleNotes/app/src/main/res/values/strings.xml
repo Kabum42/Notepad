@@ -16,5 +16,12 @@
     </string-array>
 
     <string name="title_activity_note_edition">NoteEditionActivity</string>
+    <string name="title_activity_change_settings">ChangeSettingsActivity</string>
+    <string name="pref_notes_appearance">coso</string>
+    <string name="pref_color">yellow</string>
+    <string name="pref_color_title">title</string>
+    <string name="pref_notes_content">content</string>
+    <string name="pref_chars">25</string>
+    <string name="pref_chars_title">title</string>
 
 </resources>
