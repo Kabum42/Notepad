@@ -194,7 +194,7 @@ public class MainActivity extends ActionBarActivity implements INotesView {
         return new TopicDialogListener() {
             @Override
             public void onPositiveButtonClick(String topicName) {
-                //CREAR EL TOPIC CON EL TEXT INTRODUCIDO
+                viewModel.onNewTopicCreated(topicName);
             }
         };
     }

@@ -20,19 +20,22 @@ public class ViewModel {
     private INotesView notesView;
     private IEditView editView;
     private ActionBarActivity currentView;
-    private TextView selectedTopic;
-    private EditText notepad;
 
-    private ArrayList<Integer> listOfNotesID = new ArrayList<>();
+    private TextView currentTopic;
+    private String previousText = "";
+    private String newText = "";
+
+    private ArrayList<String> listOfTopics = new ArrayList<>();
     private ArrayList<String> listOfNotes = new ArrayList<>();
-    private String currentTopic = "";
-    private String currentText = "";
-    private String currentEditText = "";
-    private int currentNotePos = 0;
-    private int currentTopicPos = 0;
-    private int charsToShow = 16;
+    private ArrayList<String> listOfNotesIDs = new ArrayList<>();
 
+    private int currentNotePos = 0;
     private boolean isUpdate = false;
+
+    private boolean okButtonEnable = true;
+
+    private int nChars = 36;
+    private String bgColor = "Yellow";
 
     public static ViewModel getInstance(NotesModel notesModel) {
         if (instance == null)
@@ -40,20 +43,27 @@ public class ViewModel {
         return instance;
     }
 
-    public void onNotesListPressed(int position, String noteItem) {
-        currentText = noteItem;
-        currentEditText = noteItem;
-        currentNotePos = position;
-
-        notesView.switchToNoteEdition();
-
-        setEditView(editView);
+    public void setNotesView(INotesView newView) {
+        model.getNotesFromTopic(currentTopic, listOfNotes, listOfNotesID);
+        notesView = newView;
+        notesView.fillListOfTopics(listOfTopics);
+        notesView.fillListOfNotes(listOfNotes);
+        currentView = (ActionBarActivity) notesView;
     }
 
-    private ViewModel(INotesModel model) {
-        this.model = model;
+    public void setEditView(IEditView newView) {
+        editView = newView;
+        currentView = (ActionBarActivity) editView;
+        editView.setTextInNote(currentText);
     }
 
+    public void setCharsToShow(int charsToShow) {
+        nChars = charsToShow;
+    }
+
+    public void setBgNotesColor(String bgNotesColor){
+        bgColor = bgNotesColor;
+    }
 
     public void onTopicsListPressed(int groupPosition, String topicItemName) {
         if (topicItemName.equals("New...")){
@@ -61,35 +71,57 @@ public class ViewModel {
         }
         else
         {
-            currentTopicPos = groupPosition;
-            setTopic(topicItemName);
+            //currentTopicPos = groupPosition;
+            notesView.setTopic(topicItemName);
             setNotesView(notesView);
         }
     }
 
     public void onTopicsListPressedFromEdition(int g_position, String name) {
 
-        selectedTopic = (TextView) currentView.findViewById(R.id.currentTopic);
-        selectedTopic.setText(currentTopic);
+        currentTopic = (TextView) currentView.findViewById(R.id.currentTopic);
+        currentTopic.setText(currentTopic);
 
         currentTopicPos = g_position;
 
     }
 
-    public void onTextInNoteChanged(String noteContents) {
+    public void onNotesListPressed(int position, String noteItem) {
+        previousText = noteItem;
+        newText = noteItem;
+        currentNotePos = position;
 
-        currentText = noteContents;
+        notesView.switchToNoteEdition();
+
+        setEditView(editView);
+    }
+
+    public void onNewTopicCreated(String name){
+        if(!name.equals("New...") && !name.equals("") && !name.equals(" ")) {
+            model.insertNewTopic(name);
+            setNotesView(notesView);
+            notesView.setTopic(name);
+        }
+    }
+
+    private ViewModel(INotesModel model) {
+        this.model = model;
+    }
+
+    public void onTextInNoteChanged(String noteContents) {
+        previousText = noteContents;
+        //...
     }
 
     public void onOkPressed() {
         String topicName = editView.getTopicName();
         currentTopic = editView.getTopicName();
-        currentText = editView.getTextInNote();
+        previousText = editView.getTextInNote();
         if (isUpdate){
-            model.updateNote(getNoteIdFromPos(currentNotePos), model.getIdTopic(currentTopic), currentText);
+            model.updateNote(getNoteIdFromPos(currentNotePos), model.getIdTopic(currentTopic.getText().toString()), newText);
         }
         else{
-            model.insertNewNote(model.getIdTopic(currentTopic), currentText);
+            model.insertNewNote(model.getIdTopic(currentTopic.getText().toString()), newText);
         }
         onExitEdition(true);
         editView.exit();
@@ -106,69 +138,15 @@ public class ViewModel {
         editView.exit();
     }
 
-
-
-    public void setTopic(String newTopic) {
-        currentTopic = newTopic;
-        selectedTopic = (TextView) currentView.findViewById(R.id.currentTopic);
-        selectedTopic.setText(newTopic);
-    }
-
-    public String getTopic(){
-        return currentTopic;
-    }
-
-    public void setTopicBgColor(String bgcolor) {
-        selectedTopic = (TextView) currentView.findViewById(R.id.currentTopic);
-        selectedTopic.setBackgroundColor(new Integer(bgcolor));
-    }
-
-    public void collapseTopic(int groupPos) {
-        topicGroup = (ExpandableListView) currentView.findViewById(R.id.topicsList);
-        topicGroup.collapseGroup(groupPos);
-    }
-
-    public void onNewTopicCreated(String topicName){
-        if(!topicName.equals("New...") && !topicName.equals("") && !topicName.equals(" ")) {
-            model.insertNewTopic(topicName);
-            setNotesView(notesView);
-            setTopic(topicName);
-        }
-    }
-
-
-
-    public void setNotesView(INotesView newView) {
-        model.getNotesFromTopic(currentTopic, listOfNotes, listOfNotesID);
-        notesView = newView;
-        notesView.fillListOfNotes(listOfNotes);
-        currentView = (ActionBarActivity) notesView;
-    }
-
-    public void setEditView(IEditView newView) {
-        editView = newView;
-        currentView = (ActionBarActivity) editView;
-        editView.setTextInNote(currentText);
-    }
-
-    public void setBgNoteColor(String bgNoteColor) {
-        notepad = (EditText) currentView.findViewById(R.id.textInNote);
-        notepad.setBackgroundColor(new Integer(bgNoteColor));
-    }
-    public void setCharsToShow(int charsToShow) {
-        this.charsToShow = charsToShow;
-    }
-
-
     private int getNoteIdFromPos(int pos){
         ArrayList<Integer> idArray = new ArrayList<>();
-        model.getNotesFromTopic(currentTopic, new ArrayList<String>(), idArray);
+        model.getNotesFromTopic(currentTopic.getText().toString(), new ArrayList<String>(), idArray);
         return idArray.get(pos);
     }
 
     private void onExitEdition(boolean isEdit)
     {
-        currentText = "";
-        currentNotePos = 0;
+        //currentText = "";
+        //currentNotePos = 0;
     }
 }

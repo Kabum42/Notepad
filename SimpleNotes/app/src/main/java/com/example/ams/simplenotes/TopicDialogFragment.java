@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,11 +40,22 @@ public class TopicDialogFragment extends DialogFragment {
 
         builder.setView(view);
 
-            //RELLENAR
+        dialogEditText = (EditText) view.findViewById(R.id.dialogEditText);
+
+        builder.setPositiveButton("Create", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String topicName = dialogEditText.getText().toString();
+                mListener.onPositiveButtonClick(topicName);
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
 
         return builder.create();
     }
-
-    //mListener.onPositiveButtonClick(topicName);
-    //dialog.cancel;????
 }
