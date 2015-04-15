@@ -14,7 +14,7 @@ public interface INotesModel {
     int getIdTopic(String topic_name);
     void getNotesFromTopic(String topic_name, ArrayList<String>
             listOfNotes, ArrayList<Integer> listOfIdNotes);
-    boolean insertNewNote(int id_topic, String text);
-    boolean updateNote(int note_id, int topic_id, String text);
-    boolean deleteNote(int note_id);
+    boolean insertNewNote(int topicId, String text);
+    boolean updateNote(int noteId, int topicId, String text);
+    boolean deleteNote(int noteId);
 }
