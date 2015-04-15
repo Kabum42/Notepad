@@ -1,4 +1,4 @@
-package com.example.ams.simplenotes;
+package com.example.ams.simplenotes.simplenotes;
 
 import android.content.ContentValues;
 import android.content.Context;

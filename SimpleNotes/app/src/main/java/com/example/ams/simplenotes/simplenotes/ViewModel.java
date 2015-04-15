@@ -1,4 +1,4 @@
-package com.example.ams.simplenotes;
+package com.example.ams.simplenotes.simplenotes;
 
 import android.support.v7.app.ActionBarActivity;
 import android.widget.EditText;
