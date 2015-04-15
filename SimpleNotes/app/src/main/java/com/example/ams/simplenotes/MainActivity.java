@@ -124,7 +124,13 @@ public class MainActivity extends ActionBarActivity implements INotesView {
         List<Map<String, String>> group = new ArrayList<Map<String, String>>();
         HashMap<String, String> item;
 
-        //RELLENAR
+        for (int i = 0; i<listOfTopics.size(); i++){
+            item = new HashMap<String, String>();
+            item.put(TOPIC_GROUP_HEADER, listOfTopics.get(i).toString());
+            group.add(item);
+        }
+
+        finalListOfTopics.add(group);
 
          adapterForTopics = new SimpleExpandableListAdapter(this, groupForTopics,
                 R.layout.topic_group, new String[]{TOPIC_LIST_HEADER},
@@ -164,6 +170,7 @@ public class MainActivity extends ActionBarActivity implements INotesView {
     public void askForATopic() {
         FragmentManager fm = getFragmentManager();
         TopicDialogFragment newTopicDialog = new TopicDialogFragment();
+
         collapseTopic(0);
         newTopicDialog.setCancelable(false);
         newTopicDialog.show(fm, "TopicDialogFragment");
@@ -173,6 +180,7 @@ public class MainActivity extends ActionBarActivity implements INotesView {
         return new TopicDialogListener() {
             @Override
             public void onPositiveButtonClick(String topicName) {
+                //CREAR EL TOPIC CON EL TEXT INTRODUCIDO
             }
         };
     }

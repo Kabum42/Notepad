@@ -8,18 +8,35 @@ import android.text.InputFilter;
 import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ExpandableListView;
+import android.widget.ListView;
+import android.widget.SimpleExpandableListAdapter;
+import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
+import static com.example.ams.simplenotes.Constants.*;
 import static com.example.ams.simplenotes.DeleteDialogFragment.*;
 
 
 public class NoteEditionActivity extends ActionBarActivity implements IEditView {
 
-    private static final int MAX_LEN_IN_NOTE = 50;
+    private static final String TOPIC_LIST_HEADER = "Topic_header";
+    private static final String TOPIC_LIST_HEADER_NAME = "Topics";
+    private static final String TOPIC_GROUP_HEADER = "Topic_group";
 
     private ViewModel viewModel;
+    private ListView notes;
+    private ExpandableListView topics;
+    private List<Map<String, String>> groupForTopics;
+    private ArrayAdapter<String> adapterForNotes;
+    private SimpleExpandableListAdapter adapterForTopics;
+
     private EditText note;
     private TextWatcher textWatcher;
 
@@ -47,7 +64,7 @@ public class NoteEditionActivity extends ActionBarActivity implements IEditView 
         };
 
         note.setFilters(new InputFilter[]
-                        { new InputFilter.LengthFilter(MAX_LEN_IN_NOTE)});
+                        { new InputFilter.LengthFilter(MAX_LEN_TEXT_IN_NOTE)});
     }
 
 
@@ -71,22 +88,41 @@ public class NoteEditionActivity extends ActionBarActivity implements IEditView 
 
     @Override
     public void fillListOfTopics(ArrayList<String> listOfTopics) {
-        //IDENTICOS QUE LOS DE LA MAIN ACTIVITY
+        List<List<Map<String,String>>> finalListOfTopics =
+                new ArrayList<List<Map<String, String>>>();
+        List<Map<String, String>> group = new ArrayList<Map<String, String>>();
+        HashMap<String, String> item;
+
+        for (int i = 0; i<listOfTopics.size(); i++){
+            item = new HashMap<String, String>();
+            item.put(TOPIC_GROUP_HEADER, listOfTopics.get(i).toString());
+            group.add(item);
+        }
+
+        finalListOfTopics.add(group);
+
+        adapterForTopics = new SimpleExpandableListAdapter(this, groupForTopics,
+                R.layout.topic_group, new String[]{TOPIC_LIST_HEADER},
+                new int[]{R.id.TopicListHeader}, finalListOfTopics,
+                R.layout.topic_item, new String[]{TOPIC_GROUP_HEADER},
+                new int[]{R.id.TopicListItem});
+
+        topics.setAdapter(adapterForTopics);
     }
 
     @Override
-    public void collapseTopic(int groupPos) {
-        //IDENTICOS QUE LOS DE LA MAIN ACTIVITY
-    }
+    public void collapseTopic(int groupPos) { topics.collapseGroup(groupPos); }
 
     @Override
     public void setTopicName(String topicName) {
-
+        TextView currentTopic = (TextView) findViewById(R.id.currentTopic);
+        currentTopic.setText(topicName);
     }
 
     @Override
     public String getTopicName() {
-        return null;
+        TextView currentTopic = (TextView) findViewById(R.id.currentTopic);
+        return currentTopic.getText().toString();
     }
 
     @Override
@@ -95,13 +131,11 @@ public class NoteEditionActivity extends ActionBarActivity implements IEditView 
     }
 
     @Override
-    public void setTextInNote(String text) {
-
-    }
+    public void setTextInNote(String text) { note.setText(text); }
 
     @Override
     public String getTextInNote() {
-        return null;
+        return note.getText().toString();
     }
 
     @Override

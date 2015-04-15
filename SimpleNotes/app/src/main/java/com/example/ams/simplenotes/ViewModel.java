@@ -13,6 +13,7 @@ public class ViewModel {
     private ViewModel(INotesModel model) {
         this.model = model;
     }
+
     public static ViewModel getInstance(INotesModel model) {
         if (instance == null) {
             //throw IllegalArgumentException;

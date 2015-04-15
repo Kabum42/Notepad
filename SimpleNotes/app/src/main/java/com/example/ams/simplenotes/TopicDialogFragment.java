@@ -7,6 +7,8 @@ import android.app.DialogFragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.ImageView;
 
 import com.example.ams.simplenotes.MainActivity;
 
@@ -20,6 +22,7 @@ public class TopicDialogFragment extends DialogFragment {
     }
 
     private TopicDialogListener mListener;
+    private EditText dialogEditText;
 
     @Override
     public void onAttach(Activity activity) {
@@ -33,8 +36,14 @@ public class TopicDialogFragment extends DialogFragment {
                 AlertDialog.THEME_HOLO_DARK);
         LayoutInflater inflater = this.getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.dialog_newtopic, null);
+
         builder.setView(view);
+
+        //dialogEditText = (EditText) findViewById(R.id.dialogEditText);
 
         return builder.create();
     }
+
+    //mListener.onPositiveButtonClick(topicName);
+    //dialog.cancel;????
 }
