@@ -54,8 +54,8 @@ public class NotesModel implements INotesModel {
     }
 
     @Override
-    public boolean insertNewTopic(String topicName) {
-        return myDBNotes.insertRecordInTable(TABLE_TOPICS, TOPIC_NAME, topicName);
+    public boolean insertNewTopic(String topic_name) {
+        return myDBNotes.insertRecordInTable(TABLE_TOPICS, TOPIC_NAME, topic_name);
     }
 
     @Override
@@ -68,26 +68,26 @@ public class NotesModel implements INotesModel {
     }
 
     @Override
-    public void getNotesFromTopic(String topicName, ArrayList<String> listOfNotes, ArrayList<Integer> listOfIdNotes) {
-        //myDBNotes.getColumnAndIds(new String[]{TABLE_NOTES}, NOTE_TEXT, NOTE_ID, TOPIC_ID + " = " + getIdTopic(topicName), new String[]{}, NOTE_ID, listOfNotes, listOfIdNotes);
+    public void getNotesFromTopic(String topic_name, ArrayList<String> listOfNotes, ArrayList<Integer> listOfIdNotes) {
+        //myDBNotes.getColumnAndIds(new String[]{TABLE_NOTES}, NOTE_TEXT, NOTE_ID, TOPIC_ID + " = " + getIdTopic(topic_name), new String[]{}, NOTE_ID, listOfNotes, listOfIdNotes);
 
         myDBNotes.getColumnAndIds(new String[]{TABLE_NOTES, TABLE_TOPICS}, NOTE_TEXT, NOTE_ID,
                 TOPIC_NAME + " = ? AND " + TABLE_NOTES + "." + TOPIC_ID + " = " + TABLE_TOPICS + "."+TOPIC_ID,
-                new String[]{topicName}, NOTE_ID+" ASC", listOfNotes, listOfIdNotes);
+                new String[]{topic_name}, NOTE_ID+" ASC", listOfNotes, listOfIdNotes);
     }
 
     @Override
-    public boolean insertNewNote(int topicId, String text) {
-        return myDBNotes.insertRecordInTable(TABLE_NOTES, TOPIC_ID, topicId, NOTE_TEXT, text);
+    public boolean insertNewNote(int id_topic, String text) {
+        return myDBNotes.insertRecordInTable(TABLE_NOTES, TOPIC_ID, id_topic, NOTE_TEXT, text);
     }
 
     @Override
-    public boolean updateNote(int noteId, int topicId, String text) {
-        return myDBNotes.updateRecordInTable(TABLE_NOTES, NOTE_ID, noteId, TOPIC_ID, topicId, NOTE_TEXT, text);
+    public boolean updateNote(int id_note, int id_topic, String text) {
+        return myDBNotes.updateRecordInTable(TABLE_NOTES, NOTE_ID, id_note, TOPIC_ID, id_topic, NOTE_TEXT, text);
     }
 
     @Override
-    public boolean deleteNote(int noteId) {
-        return myDBNotes.deleteRecordInTable(TABLE_NOTES,NOTE_ID + " = " + noteId, new String[]{});
+    public boolean deleteNote(int note_id) {
+        return myDBNotes.deleteRecordInTable(TABLE_NOTES,NOTE_ID + " = " + note_id, new String[]{});
     }
 }

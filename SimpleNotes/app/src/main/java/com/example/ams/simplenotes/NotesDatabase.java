@@ -39,17 +39,17 @@ public class NotesDatabase extends SQLiteOpenHelper implements IDatabase {
     @Override
     public void onCreate(SQLiteDatabase db) {
         for (TableSpecification specification : specifications) {
-            StringBuilder sBuilder = new StringBuilder();
-            sBuilder.append("CREATE TABLE " + specification.getName() + " (");
+            StringBuilder builder = new StringBuilder();
+            builder.append("CREATE TABLE " + specification.getName() + " (");
             for (int i = 0 ; i < specification.getColumns().length ; i++) {
                 if (i > 0)
-                    sBuilder.append(", ");
-                sBuilder.append(specification.getColumns()[i] + " " + specification.getTypes()[i]);
+                    builder.append(", ");
+                builder.append(specification.getColumns()[i] + " " + specification.getTypes()[i]);
             }
             if (specification.getConstraints() != null)
-                sBuilder.append(", " + specification.getConstraints());
-            sBuilder.append(")");
-            db.execSQL(sBuilder.toString());
+                builder.append(", " + specification.getConstraints());
+            builder.append(")");
+            db.execSQL(builder.toString());
             if (specification.getInitialValues()!= null) {
                 String insert = "INSERT INTO " + specification.getName() + "(" + specification.getInitialColumn() + ") VALUES (\"";
                 for (String value : specification.getInitialValues()) {
@@ -72,8 +72,8 @@ public class NotesDatabase extends SQLiteOpenHelper implements IDatabase {
     }
 
     @Override
-    public ArrayList<String> selectColumnFromTable(String tableName, String columns, String orderBy) {
-        Cursor cursor = theDB.query(tableName, new String[]{columns}, null, new String[]{}, null, null, orderBy);
+    public ArrayList<String> selectColumnFromTable(String table_name, String columns, String order_by) {
+        Cursor cursor = theDB.query(table_name, new String[]{columns}, null, new String[]{}, null, null, order_by);
 
         ArrayList<String> column = new ArrayList<>();
         if (cursor.getCount() > 0) {
@@ -90,12 +90,12 @@ public class NotesDatabase extends SQLiteOpenHelper implements IDatabase {
     }
 
     @Override
-    public int getColumnFromId(String tableName, String column, String columnId, String valueID){
+    public int getColumnFromId(String table_name, String column, String idColumn, String idValue){
         String[] columns = { column };
-        String where = columnId + "= ?";
-        String[] sel_args = new String[] {valueID};
+        String where = idColumn + "= ?";
+        String[] sel_args = new String[] {idValue};
 
-        Cursor cursor = theDB.query(tableName, columns, where, sel_args, null, null, null);
+        Cursor cursor = theDB.query(table_name, columns, where, sel_args, null, null, null);
 
         int idTopic = INDEX_ERR;
         if (cursor.getCount() == 1) {
@@ -108,26 +108,26 @@ public class NotesDatabase extends SQLiteOpenHelper implements IDatabase {
     }
 
     @Override
-    public void getColumnAndIds(String[] tables, String column, String columnId, String whereString, String[] sel_args,
+    public void getColumnAndIds(String[] tables, String column, String idColumn, String where, String[] sel_args,
                                 String order_by, List<String> elements, List<Integer> ids) {
         Cursor queryResult;
 
         StringBuilder query = new StringBuilder();
-        query.append("SELECT " + column + ", " + columnId);
+        query.append("SELECT " + column + ", " + idColumn);
         query.append(" FROM ");
         for (int i = 0 ; i < tables.length ; i++) {
             if (i > 0)
                 query.append(", ");
             query.append(tables[i]);
         }
-        query.append(" WHERE " + whereString);
+        query.append(" WHERE " + where);
         query.append(" ORDER BY " + order_by);
 
         queryResult = theDB.rawQuery(query.toString(), sel_args);
 
         if (queryResult.getCount() > 0) {
             int indexColumnTextInNote = queryResult.getColumnIndexOrThrow(column);
-            int indexColumnIdNote = queryResult.getColumnIndexOrThrow(columnId);
+            int indexColumnIdNote = queryResult.getColumnIndexOrThrow(idColumn);
             if (queryResult.moveToFirst()) {
                 do {
                     ids.add(queryResult.getInt(indexColumnIdNote));
@@ -150,10 +150,10 @@ public class NotesDatabase extends SQLiteOpenHelper implements IDatabase {
     }
 
     @Override
-    public <T> boolean insertRecordInTable(String tableName, String column, T value) {
+    public <T> boolean insertRecordInTable(String table_name, String column, T value) {
         ContentValues values = new ContentValues();
         insertInValues(values, column, value);
-        if (theDB.insert(tableName, null, values) == -1) {
+        if (theDB.insert(table_name, null, values) == -1) {
             Log.w(NotesDatabase.class.getName(), "Insertion of a new topic in database FAILED");
             return false;
         }
@@ -161,12 +161,12 @@ public class NotesDatabase extends SQLiteOpenHelper implements IDatabase {
     }
 
     @Override
-    public <T1, T2> boolean insertRecordInTable(String tableName, String column1, T1 value1, String column2, T2 value2) {
+    public <T1, T2> boolean insertRecordInTable(String table_name, String column1, T1 value1, String column2, T2 value2) {
 
         ContentValues values = new ContentValues();
         insertInValues(values, column1, value1);
         insertInValues(values, column2, value2);
-        if (theDB.insert(tableName, null, values) == -1) {
+        if (theDB.insert(table_name, null, values) == -1) {
             Log.w(NotesDatabase.class.getName(), "Insertion of a new note in database FAILED");
             return false;
         }
@@ -174,7 +174,7 @@ public class NotesDatabase extends SQLiteOpenHelper implements IDatabase {
     }
 
     @Override
-    public <T1, T2> boolean updateRecordInTable(String tableName, String keyColumn, int keyValue, String column1,
+    public <T1, T2> boolean updateRecordInTable(String table_name, String keyColumn, int keyValue, String column1,
                                                 T1 value1, String column2, T2 value2) {
 
         ContentValues values = new ContentValues();
@@ -184,7 +184,7 @@ public class NotesDatabase extends SQLiteOpenHelper implements IDatabase {
         String where = keyColumn + "= ?";
         String[] where_args = new String[] { Integer.toString(keyValue)};
 
-        if (theDB.update(tableName, values, where, where_args) != 1) {
+        if (theDB.update(table_name, values, where, where_args) != 1) {
             Log.w(NotesDatabase.class.getName(), "Upgrade of an existing note in database FAILED");
             return false;
         }
@@ -192,8 +192,8 @@ public class NotesDatabase extends SQLiteOpenHelper implements IDatabase {
     }
 
     @Override
-    public boolean deleteRecordInTable(String tableName, String whereString, String[] whereArgs) {
-        if (theDB.delete(tableName, whereString, whereArgs) != 1) {
+    public boolean deleteRecordInTable(String table_name, String where, String[] where_args) {
+        if (theDB.delete(table_name, where, where_args) != 1) {
             Log.w(NotesDatabase.class.getName(), "Deletion of an existing note in database FAILED");
             return false;
         }
