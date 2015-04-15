@@ -123,7 +123,9 @@ public class MainActivity extends ActionBarActivity implements INotesView {
     @Override
     public void fillListOfNotes(ArrayList<String> listOfNotes){
 
-        listOfNotes.add("New...");
+        TextView currentTopic = (TextView) findViewById(R.id.currentTopic);
+        if(!currentTopic.getText().toString().equals(""))
+            listOfNotes.add("New...");
 
         adapterForNotes = new ArrayAdapter<String>(this, R.layout.list_item, listOfNotes);
         notes.setAdapter(adapterForNotes);

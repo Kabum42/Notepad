@@ -6,13 +6,12 @@ import android.widget.ExpandableListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Created by AMS on 13/04/2015.
  */
 public class ViewModel {
-
-    ExpandableListView topicGroup;
 
     private static ViewModel instance;
     private INotesModel model;
@@ -21,21 +20,28 @@ public class ViewModel {
     private IEditView editView;
     private ActionBarActivity currentView;
 
-    private TextView currentTopic;
-    private String previousText = "";
+    private String currentTopic = "";
+    private String currentText = "";
     private String newText = "";
+
+    private TextView currentTopicView;
 
     private ArrayList<String> listOfTopics = new ArrayList<>();
     private ArrayList<String> listOfNotes = new ArrayList<>();
-    private ArrayList<String> listOfNotesIDs = new ArrayList<>();
+    private ArrayList<Integer> listOfNotesIDs = new ArrayList<>();
 
     private int currentNotePos = 0;
+    private int currentTopicPos = 0;
     private boolean isUpdate = false;
 
     private boolean okButtonEnable = true;
 
     private int nChars = 36;
     private String bgColor = "Yellow";
+
+    private ViewModel(INotesModel model) {
+        this.model = model;
+    }
 
     public static ViewModel getInstance(NotesModel notesModel) {
         if (instance == null)
@@ -44,16 +50,20 @@ public class ViewModel {
     }
 
     public void setNotesView(INotesView newView) {
-        model.getNotesFromTopic(currentTopic, listOfNotes, listOfNotesID);
+        listOfNotes = new ArrayList<String>();
+        model.getNotesFromTopic(currentTopic, listOfNotes, listOfNotesIDs);
+
         notesView = newView;
-        notesView.fillListOfTopics(listOfTopics);
         notesView.fillListOfNotes(listOfNotes);
+        notesView.fillListOfTopics(new ArrayList<String>(Arrays.asList(model.getListOfTopics())));
         currentView = (ActionBarActivity) notesView;
     }
 
     public void setEditView(IEditView newView) {
+
         editView = newView;
         currentView = (ActionBarActivity) editView;
+        notesView.fillListOfTopics(new ArrayList<String>(Arrays.asList(model.getListOfTopics())));
         editView.setTextInNote(currentText);
     }
 
@@ -71,7 +81,7 @@ public class ViewModel {
         }
         else
         {
-            //currentTopicPos = groupPosition;
+            currentTopicPos = groupPosition;
             notesView.setTopic(topicItemName);
             setNotesView(notesView);
         }
@@ -79,15 +89,15 @@ public class ViewModel {
 
     public void onTopicsListPressedFromEdition(int g_position, String name) {
 
-        currentTopic = (TextView) currentView.findViewById(R.id.currentTopic);
-        currentTopic.setText(currentTopic);
+        currentTopicView = (TextView) currentView.findViewById(R.id.currentTopic);
+        currentTopicView.setText(currentTopic);
 
         currentTopicPos = g_position;
 
     }
 
     public void onNotesListPressed(int position, String noteItem) {
-        previousText = noteItem;
+        currentText = noteItem;
         newText = noteItem;
         currentNotePos = position;
 
@@ -104,24 +114,20 @@ public class ViewModel {
         }
     }
 
-    private ViewModel(INotesModel model) {
-        this.model = model;
-    }
-
     public void onTextInNoteChanged(String noteContents) {
-        previousText = noteContents;
+        currentText = noteContents;
         //...
     }
 
     public void onOkPressed() {
         String topicName = editView.getTopicName();
-        currentTopic = editView.getTopicName();
-        previousText = editView.getTextInNote();
+        //currentTopic = editView.getTopicName();
+        currentText = editView.getTextInNote();
         if (isUpdate){
-            model.updateNote(getNoteIdFromPos(currentNotePos), model.getIdTopic(currentTopic.getText().toString()), newText);
+            model.updateNote(getNoteIdFromPos(currentNotePos), model.getIdTopic(currentTopic), newText);
         }
         else{
-            model.insertNewNote(model.getIdTopic(currentTopic.getText().toString()), newText);
+            model.insertNewNote(model.getIdTopic(currentTopic), newText);
         }
         onExitEdition(true);
         editView.exit();
@@ -140,7 +146,7 @@ public class ViewModel {
 
     private int getNoteIdFromPos(int pos){
         ArrayList<Integer> idArray = new ArrayList<>();
-        model.getNotesFromTopic(currentTopic.getText().toString(), new ArrayList<String>(), idArray);
+        model.getNotesFromTopic(currentTopic, new ArrayList<String>(), idArray);
         return idArray.get(pos);
     }
 
