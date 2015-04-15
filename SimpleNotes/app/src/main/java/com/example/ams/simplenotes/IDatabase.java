@@ -15,7 +15,7 @@ public interface IDatabase {
 
     <T> boolean insertRecordInTable(String table_name, String column, T value);
     <T1, T2> boolean insertRecordInTable(String table_name, String column1, T1 value1, String column2, T2 value2);
-    <T1, T2> void updateRecordInTable(String table_name, String keyColumn, int keyValue, String column1,
-                                      T1 value1, String column2, T2 value2);
-    void deleteRecordInTable(String table_name, String where, String[] where_args);
+    <T1, T2> boolean updateRecordInTable(String table_name, String keyColumn, int keyValue, String column1,
+                                         T1 value1, String column2, T2 value2);
+    boolean deleteRecordInTable(String table_name, String where, String[] where_args);
 }
