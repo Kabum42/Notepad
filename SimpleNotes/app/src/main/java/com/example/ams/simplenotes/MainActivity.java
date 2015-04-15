@@ -20,6 +20,7 @@ import android.widget.SimpleExpandableListAdapter;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -59,6 +60,8 @@ public class MainActivity extends ActionBarActivity implements INotesView {
                 put(TOPIC_LIST_HEADER, TOPIC_LIST_HEADER_NAME);
             }});
         }};
+
+        fillListOfTopics(new ArrayList<String>(Arrays.asList(initial_topics)));
 
         topics.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             @Override
