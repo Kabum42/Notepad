@@ -1,4 +1,4 @@
-package main.java.com.example.ams.simplenotes;
+package com.example.ams.simplenotes;
 
 /**
  * Created by AMS on 13/04/2015.

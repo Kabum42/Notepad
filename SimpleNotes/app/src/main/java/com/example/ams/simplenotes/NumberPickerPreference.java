@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 package com.example.ams.simplenotes;
-=======
-package main.java.com.example.ams.simplenotes;
->>>>>>> origin/kabum42
 
 import android.content.Context;
 import android.content.res.TypedArray;

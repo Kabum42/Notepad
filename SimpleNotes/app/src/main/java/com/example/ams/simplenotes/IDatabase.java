@@ -1,4 +1,4 @@
-package main.java.com.example.ams.simplenotes;
+package com.example.ams.simplenotes;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,4 +1,4 @@
-package main.java.com.example.ams.simplenotes;
+package com.example.ams.simplenotes;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,12 +6,7 @@ import java.util.List;
 /**
  * Created by AMS on 13/04/2015.
  */
-<<<<<<< HEAD
-public class NotesModel {
-    public static NotesModel getInstance(NotesDatabase myDBNotes, String[] initial_topics) {
-        return null;
-    }
-=======
+
 public class NotesModel implements INotesModel {
     private static final String TABLE_TOPICS = "topics_for_notes";
     private static final String TOPIC_ID = "topic_id";
@@ -20,14 +15,17 @@ public class NotesModel implements INotesModel {
     private static final String INTEGER_KEY = "INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL";
 
     private static final String[] TOPIC_COLUMNS = {TOPIC_ID, TOPIC_NAME};
->>>>>>> origin/kabum42
-}
 
-    private NotesModel(IDatabase myDBNotes, String [] initialTopics) {
-        this.myDBNotes = myDBNotes;
-        myDBNotes.initDatabase(new TableSpecification[]{..., ...});
+    public static NotesModel getInstance(NotesDatabase myDBNotes, String[] initial_topics) {
+        return null;
     }
-    public static NotesModel getInstance(com.example.ams.simplenotes.IDatabase myDBNotes, String [] initialTopics) {
+
+    private NotesModel(IDatabase myDBNotes, String[] initialTopics) {
+        this.myDBNotes = myDBNotes;
+        myDBNotes.initDatabase(new TableSpecification[]{,});
+    }
+
+    public static NotesModel getInstance(com.example.ams.simplenotes.IDatabase myDBNotes, String[] initialTopics) {
         return instance;
     }
 
@@ -65,3 +63,4 @@ public class NotesModel implements INotesModel {
     public void deleteNote(int note_id) {
 
     }
+}

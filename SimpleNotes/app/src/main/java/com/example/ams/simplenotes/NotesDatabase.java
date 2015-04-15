@@ -1,4 +1,4 @@
-package main.java.com.example.ams.simplenotes;
+package com.example.ams.simplenotes;
 
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -9,12 +9,6 @@ import java.util.List;
 /**
  * Created by AMS on 13/04/2015.
  */
-<<<<<<< HEAD
-public class NotesDatabase {
-    public static NotesDatabase getInstance(MainActivity mainActivity) {
-        return null;
-    }
-=======
 
 public class NotesDatabase extends SQLiteOpenHelper implements IDatabase {
 
@@ -25,7 +19,7 @@ public class NotesDatabase extends SQLiteOpenHelper implements IDatabase {
 
 // SQL sentences run through SQLiteDatabase db to create database
 
-       db.execSQL(...);
+       db.execSQL();
 
     }
 
@@ -75,5 +69,4 @@ public class NotesDatabase extends SQLiteOpenHelper implements IDatabase {
     public void deleteRecordInTable(String table_name, String where, String[] where_args) {
 
     }
->>>>>>> origin/kabum42
 }

@@ -1,4 +1,4 @@
-package main.java.com.example.ams.simplenotes;
+package com.example.ams.simplenotes;
 
 /**
  * Created by jcamen on 2/03/15.
