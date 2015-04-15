@@ -13,6 +13,7 @@ import java.util.List;
 public class NotesDatabase extends SQLiteOpenHelper implements IDatabase {
 
     private SQLiteDatabase theDB;
+    private TableSpecification[] specifications;
 
     @Override
     public void onCreate(SQLiteDatabase db) {
@@ -68,5 +69,9 @@ public class NotesDatabase extends SQLiteOpenHelper implements IDatabase {
     @Override
     public void deleteRecordInTable(String table_name, String where, String[] where_args) {
 
+    }
+
+    public static NotesDatabase getInstance(MainActivity mainActivity) {
+        return null;
     }
 }

@@ -47,4 +47,8 @@ public class ViewModel {
     public void onNotesListPressed(int position, String s) {
 
     }
+
+    public void setTopic(String topic) {
+
+    }
 }

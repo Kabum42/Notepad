@@ -14,6 +14,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ListView;
 import android.widget.SimpleExpandableListAdapter;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -33,6 +34,8 @@ public class MainActivity extends ActionBarActivity implements INotesView {
     private ListView notes;
     private ExpandableListView topics;
     private List<Map<String, String>> groupForTopics;
+    private ArrayAdapter<String> adapterForNotes;
+    private SimpleExpandableListAdapter adapterForTopics;
 
 
     @Override
@@ -78,65 +81,11 @@ public class MainActivity extends ActionBarActivity implements INotesView {
 
     }
 
-    @Override
-    public void setTopic(String topic) {
-        //CAMBIA EL TEXTO DEL TEXTVIEW QUE MUESTRA EL TEMA ESCOGIDO.
+    protected void onResume()
+    {
+        super.onResume();
+        viewModel.setNotesView(this);
     }
-
-    @Override
-    public void setTopicBgColor(String bgColor) {
-        //CAMBIA EL COLOR DEL TEXTVIEW QUE MUESTRA EL TEMA ESCOGIDO.
-    }
-
-    @Override
-    public void fillListOfNotes(ArrayList<String> listOfNotes){
-        ArrayAdapter<String> adapterForNotes = new ArrayAdapter<String>(this, R.layout.list_item, listOfNotes);
-        notes.setAdapter(adapterForNotes);
-    }
-
-    @Override
-    public void fillListOfTopics(ArrayList<String> listOfTopics) {
-
-        List<List<Map<String,String>>> finalListOfTopics =
-                new ArrayList<List<Map<String, String>>>();
-        List<Map<String, String>> group = new ArrayList<Map<String, String>>();
-        HashMap<String, String> item;
-
-         SimpleExpandableListAdapter adapterForTopics = new SimpleExpandableListAdapter(this, groupForTopics,
-                R.layout.topic_group, new String[]{TOPIC_LIST_HEADER},
-                new int[]{R.id.TopicListHeader}, finalListOfTopics,
-                R.layout.topic_item, new String[]{TOPIC_GROUP_HEADER},
-                new int[]{R.id.TopicListItem});
-        topics.setAdapter(adapterForTopics);
-    }
-
-    @Override
-    public void collapseTopic(int groupPos) {
-        //COLAPSA LA EXPANDABLE TOPIC LIST
-    }
-
-    @Override
-    public void switchToNoteEdition() {
-        //COMIENZA LA NOTE EDITION ACTIVITY
-    }
-
-    @Override
-    public void askForATopic() {
-        FragmentManager fm = getFragmentManager();
-        TopicDialogFragment newTopicDialog = new TopicDialogFragment();
-        collapseTopic(0);
-        newTopicDialog.setCancelable(false);
-        newTopicDialog.show(fm, "TopicDialogFragment");
-    }
-
-    public TopicDialogListener getTopicListener() {
-        return new TopicDialogListener() {
-            @Override
-            public void onPositiveButtonClick(String topicName) {
-            }
-        };
-    }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -154,5 +103,77 @@ public class MainActivity extends ActionBarActivity implements INotesView {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public void fillListOfNotes(ArrayList<String> listOfNotes){
+
+        listOfNotes.add("New...");
+
+        adapterForNotes = new ArrayAdapter<String>(this, R.layout.list_item, listOfNotes);
+        notes.setAdapter(adapterForNotes);
+    }
+
+    @Override
+    public void fillListOfTopics(ArrayList<String> listOfTopics) {
+
+        listOfTopics.add("New...");
+
+        List<List<Map<String,String>>> finalListOfTopics =
+                new ArrayList<List<Map<String, String>>>();
+        List<Map<String, String>> group = new ArrayList<Map<String, String>>();
+        HashMap<String, String> item;
+
+        //RELLENAR
+
+         adapterForTopics = new SimpleExpandableListAdapter(this, groupForTopics,
+                R.layout.topic_group, new String[]{TOPIC_LIST_HEADER},
+                new int[]{R.id.TopicListHeader}, finalListOfTopics,
+                R.layout.topic_item, new String[]{TOPIC_GROUP_HEADER},
+                new int[]{R.id.TopicListItem});
+
+        topics.setAdapter(adapterForTopics);
+    }
+
+    @Override
+    public void setTopic(String topic) {
+        TextView currentTopic = (TextView) findViewById(R.id.currentTopic);
+        currentTopic.setText(topic);
+        //viewModel.setTopic(topic);
+        //collapseTopic(0);
+    }
+
+    @Override
+    public void setTopicBgColor(String bgColor) {
+        TextView currentTopic = (TextView) findViewById(R.id.currentTopic);
+        currentTopic.setBackgroundColor(new Integer(bgColor));
+    }
+
+    @Override
+    public void collapseTopic(int groupPos) {
+        topics.collapseGroup(groupPos);
+    }
+
+    @Override
+    public void switchToNoteEdition() {
+        Intent editionActivity= new Intent(this, NoteEditionActivity.class);
+        startActivity(editionActivity);
+    }
+
+    @Override
+    public void askForATopic() {
+        FragmentManager fm = getFragmentManager();
+        TopicDialogFragment newTopicDialog = new TopicDialogFragment();
+        collapseTopic(0);
+        newTopicDialog.setCancelable(false);
+        newTopicDialog.show(fm, "TopicDialogFragment");
+    }
+
+    public TopicDialogListener getTopicListener() {
+        return new TopicDialogListener() {
+            @Override
+            public void onPositiveButtonClick(String topicName) {
+            }
+        };
     }
 }
